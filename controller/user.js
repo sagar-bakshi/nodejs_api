@@ -1,61 +1,48 @@
+import bcrypt from "bcrypt";
 import User from "../models/user.js";
+import jwt from "jsonwebtoken";
 
 export const getAllUsers = async (req, res) => {
   const users = await User.find({});
-
   res.json({
     sucess: true,
     users,
   });
 };
 
-export const createNewUser = async (req, res) => {
-  const { name, email, password } = req.body;
+export const login = async (req, res, next) => {};
 
-  const user = await User.create({
+export const register = async (req, res) => {
+  const { name, email, password } = req.body;
+  let user = await User.findOne({ email });
+
+  if (user) {
+    return res.status(409).json({
+      sucess: false,
+      error: "User already exists",
+      message:
+        "The username you provided already exists. Please choose a different username.",
+    });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  user = await User.create({
     name,
     email,
-    password,
+    password: hashedPassword,
   });
+
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
 
   res
     .status(201)
-    .cookie("temp", "mycookie")
+    .cookie("token", token, {
+      httpOnly: true,
+      maxAge: 15 * 60 * 1000,
+    })
     .json({
-      success: true,
-      message: `${user.name} has been create`,
+      sucess: true,
+      message: "User Register Successfully",
     });
-};
-
-export const getUserbyId = async (req, res) => {
-  const { id } = req.params;
-  console.log(req.params);
-  const user = await User.findById(id);
-  res.status(200).json({
-    success: true,
-    user,
-  });
-};
-
-export const updateUserbyId = async (req, res) => {
-  const { id } = req.params;
-  console.log(req.params);
-  const user = await User.findById(id);
-  res.status(200).json({
-    success: true,
-    message: "update...",
-    user,
-  });
-};
-
-export const deleteUserbyId = async (req, res) => {
-  const { id } = req.params;
-  console.log(req.params);
-
-  await User.deleteOne(id);
-
-  res.status(200).json({
-    success: true,
-    message: "Deleted....",
-  });
 };

@@ -11,8 +11,8 @@ config({
 //Middlewares
 app.use(express.json());
 
-//handling the routes
-app.use("/users", userRouter);
+//Using routes
+app.use("/api/v1/users", userRouter);
 
 app.get("/", (req, res) => {
   res.send("<h1>Welcome to our api service</h1>");
