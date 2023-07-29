@@ -36,3 +36,26 @@ export const getUserbyId = async (req, res) => {
     user,
   });
 };
+
+export const updateUserbyId = async (req, res) => {
+  const { id } = req.params;
+  console.log(req.params);
+  const user = await User.findById(id);
+  res.status(200).json({
+    success: true,
+    message: "update...",
+    user,
+  });
+};
+
+export const deleteUserbyId = async (req, res) => {
+  const { id } = req.params;
+  console.log(req.params);
+
+  await User.deleteOne(id);
+
+  res.status(200).json({
+    success: true,
+    message: "Deleted....",
+  });
+};
