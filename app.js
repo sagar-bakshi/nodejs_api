@@ -5,7 +5,7 @@ import { config } from "dotenv";
 export const app = express();
 
 config({
-  path: "./config/config.env",
+  path: "./config.env",
 });
 
 //Middlewares
