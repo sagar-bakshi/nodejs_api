@@ -5,6 +5,6 @@ import { connectToDatabase } from "./config/database.js";
 connectToDatabase();
 
 //app listening port
-app.listen(4000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server is listing on port 4000");
 });

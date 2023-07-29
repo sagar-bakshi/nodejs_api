@@ -1,7 +1,12 @@
 import express from "express";
 import userRouter from "./routes/userRoutes.js";
+import { config } from "dotenv";
 
 export const app = express();
+
+config({
+  path: "./config/config.env",
+});
 
 //Middlewares
 app.use(express.json());
