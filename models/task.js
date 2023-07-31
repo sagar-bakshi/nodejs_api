@@ -30,6 +30,6 @@ const schema = new Schema({
   },
 });
 
-const User = model("Task", schema);
+const Task = model("Task", schema);
 
-export default User;
+export default Task;
